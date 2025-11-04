@@ -1,0 +1,103 @@
+import React, { useState } from 'react';
+import './{{pascalCase name}}.css';
+
+// Importar componentes directamente desde el código fuente
+import { Card } from '../../../../consalud-ui/src/components/Card/Card';
+import { Button } from '../../../../consalud-ui/src/components/Button/Button';
+
+interface FormData {
+  campo1: string;
+  campo2: string;
+  campo3: string;
+}
+
+const {{pascalCase name}}: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    campo1: '',
+    campo2: '',
+    campo3: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Form data:', formData);
+  };
+
+  return (
+    <div className="{{kebabCase name}}">
+      <div className="{{kebabCase name}}__container">
+        <h1 className="{{kebabCase name}}__title">
+          {{pascalCase name}}
+        </h1>
+        
+        <Card className="{{kebabCase name}}__content">
+          <form className="{{kebabCase name}}__form" onSubmit={handleSubmit}>
+            <div className="{{kebabCase name}}__form-group">
+              <label htmlFor="campo1" className="{{kebabCase name}}__label">
+                Campo 1
+              </label>
+              <input
+                type="text"
+                id="campo1"
+                name="campo1"
+                value={formData.campo1}
+                onChange={handleChange}
+                className="{{kebabCase name}}__input"
+                required
+              />
+            </div>
+
+            <div className="{{kebabCase name}}__form-group">
+              <label htmlFor="campo2" className="{{kebabCase name}}__label">
+                Campo 2
+              </label>
+              <input
+                type="text"
+                id="campo2"
+                name="campo2"
+                value={formData.campo2}
+                onChange={handleChange}
+                className="{{kebabCase name}}__input"
+                required
+              />
+            </div>
+
+            <div className="{{kebabCase name}}__form-group">
+              <label htmlFor="campo3" className="{{kebabCase name}}__label">
+                Campo 3
+              </label>
+              <textarea
+                id="campo3"
+                name="campo3"
+                value={formData.campo3}
+                onChange={handleChange}
+                className="{{kebabCase name}}__textarea"
+                rows={4}
+              />
+            </div>
+
+            <div className="{{kebabCase name}}__form-actions">
+              <Button type="submit" variant="primary" size="medium">
+                Guardar
+              </Button>
+              <Button type="button" variant="secondary" size="medium">
+                Cancelar
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default {{pascalCase name}};
+

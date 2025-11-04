@@ -1,0 +1,65 @@
+import React, { useState } from 'react';
+import './{{pascalCase name}}.css';
+
+// Importar componentes directamente desde el código fuente
+import { Card } from '../../../../consalud-ui/src/components/Card/Card';
+import { Button } from '../../../../consalud-ui/src/components/Button/Button';
+
+interface TableRow {
+  id: number;
+  [key: string]: unknown;
+}
+
+const {{pascalCase name}}: React.FC = () => {
+  const [data, setData] = useState<TableRow[]>([
+    { id: 1, nombre: 'Ejemplo 1', fecha: '2024-01-01', estado: 'Activo' },
+    { id: 2, nombre: 'Ejemplo 2', fecha: '2024-01-02', estado: 'Inactivo' },
+  ]);
+
+  return (
+    <div className="{{kebabCase name}}">
+      <div className="{{kebabCase name}}__container">
+        <h1 className="{{kebabCase name}}__title">
+          {{pascalCase name}}
+        </h1>
+        
+        <Card className="{{kebabCase name}}__content">
+          <div className="{{kebabCase name}}__table-wrapper">
+            <table className="{{kebabCase name}}__table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row) => (
+                  <tr key={row.id}>
+                    <td>{row.id}</td>
+                    <td>{row.nombre as string}</td>
+                    <td>{row.fecha as string}</td>
+                    <td>{row.estado as string}</td>
+                    <td>
+                      <Button variant="secondary" size="small" className="{{kebabCase name}}__action-btn">
+                        Editar
+                      </Button>
+                      <Button variant="inverted" size="small" className="{{kebabCase name}}__action-btn">
+                        Eliminar
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default {{pascalCase name}};
+

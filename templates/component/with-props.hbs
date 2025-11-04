@@ -1,0 +1,25 @@
+import React from 'react';
+import './{{pascalCase name}}.css';
+
+interface {{pascalCase name}}Props {
+  title: string;
+  description?: string;
+  className?: string;
+  onClick?: () => void;
+}
+
+const {{pascalCase name}}: React.FC<{{pascalCase name}}Props> = ({ 
+  title, 
+  description, 
+  className,
+  onClick 
+}) => {
+  return (
+    <div className={`{{kebabCase name}} ${className || ''}`} onClick={onClick}>
+      <h2 className="{{kebabCase name}}__title">{title}</h2>
+      {description && <p className="{{kebabCase name}}__description">{description}</p>}
+    </div>
+  );
+};
+
+export default {{pascalCase name}};

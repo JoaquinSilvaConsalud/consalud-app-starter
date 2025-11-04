@@ -1,0 +1,38 @@
+import { useEffect, useState } from 'react';
+
+interface Use{{pascalCase name}}Options {
+  // Add options here
+}
+
+interface Use{{pascalCase name}}Return {
+  data: any;
+  loading: boolean;
+  error: Error | null;
+}
+
+const use{{pascalCase name}} = (options?: Use{{pascalCase name}}Options): Use{{pascalCase name}}Return => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    // Add effect logic here
+    setLoading(true);
+    
+    // Simulate async operation
+    const timer = setTimeout(() => {
+      setData('Effect completed');
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return {
+    data,
+    loading,
+    error,
+  };
+};
+
+export default use{{pascalCase name}};

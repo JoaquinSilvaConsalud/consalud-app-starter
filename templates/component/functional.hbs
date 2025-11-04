@@ -1,0 +1,16 @@
+import React from 'react';
+import './{{pascalCase name}}.css';
+
+interface {{pascalCase name}}Props {
+  className?: string;
+}
+
+const {{pascalCase name}}: React.FC<{{pascalCase name}}Props> = ({ className }) => {
+  return (
+    <div className={`{{kebabCase name}} ${className || ''}`}>
+      <h2 className="{{kebabCase name}}__title">{{pascalCase name}}</h2>
+    </div>
+  );
+};
+
+export default {{pascalCase name}};

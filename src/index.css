@@ -1,0 +1,39 @@
+@import url('../node_modules/@consalud/consalud-ui/src/tokens.css');
+
+/* Minimal normalize/reset */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--consalud-font-family);
+  font-size: var(--consalud-font-size-base);
+  line-height: var(--consalud-line-height-normal);
+  color: var(--consalud-black);
+  background: var(--consalud-white);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--consalud-font-weight-semibold);
+}
+
+p {
+  margin: 0;
+}

@@ -1,0 +1,25 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import './{{pascalCase name}}.css';
+
+const {{pascalCase name}}: React.FC = () => {
+  const params = useParams();
+
+  return (
+    <div className="{{kebabCase name}}">
+      <div className="{{kebabCase name}}__container">
+        <h1 className="{{kebabCase name}}__title">
+          {{pascalCase name}}
+        </h1>
+        
+        <div className="{{kebabCase name}}__content">
+          <p className="{{kebabCase name}}__description">
+            This is the {{pascalCase name}} page.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default {{pascalCase name}};

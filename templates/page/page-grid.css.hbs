@@ -1,0 +1,76 @@
+.{{kebabCase name}} {
+  min-height: 100vh;
+  background: var(--consalud-white);
+  padding: var(--consalud-spacing-xl);
+}
+
+.{{kebabCase name}}__container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.{{kebabCase name}}__title {
+  font-size: var(--consalud-font-size-3xl);
+  font-weight: var(--consalud-font-weight-bold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-xl);
+}
+
+.{{kebabCase name}}__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--consalud-spacing-lg);
+}
+
+.{{kebabCase name}}__card {
+  overflow: hidden;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.{{kebabCase name}}__card:hover {
+  transform: translateY(-4px);
+}
+
+.{{kebabCase name}}__card-image {
+  width: 100%;
+  height: 200px;
+  background-color: var(--consalud-gray-light);
+  overflow: hidden;
+}
+
+.{{kebabCase name}}__card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.{{kebabCase name}}__card-content {
+  padding: var(--consalud-spacing-lg);
+  flex: 1;
+}
+
+.{{kebabCase name}}__card-title {
+  font-size: var(--consalud-font-size-xl);
+  font-weight: var(--consalud-font-weight-bold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-sm);
+}
+
+.{{kebabCase name}}__card-description {
+  font-size: var(--consalud-font-size-base);
+  color: var(--consalud-gray-dark);
+  line-height: var(--consalud-line-height-normal);
+}
+
+.{{kebabCase name}}__card-actions {
+  padding: var(--consalud-spacing-md) var(--consalud-spacing-lg);
+  border-top: 1px solid var(--consalud-gray-light);
+}
+
+.{{kebabCase name}}__card-button {
+  width: 100%;
+}
+

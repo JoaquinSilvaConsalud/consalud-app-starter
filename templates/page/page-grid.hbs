@@ -1,0 +1,82 @@
+import React from 'react';
+import './{{pascalCase name}}.css';
+
+// Importar componentes directamente desde el código fuente
+import { Card } from '../../../../consalud-ui/src/components/Card/Card';
+import { Button } from '../../../../consalud-ui/src/components/Button/Button';
+
+interface CardData {
+  id: number;
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const {{pascalCase name}}: React.FC = () => {
+  const cards: CardData[] = [
+    {
+      id: 1,
+      title: 'Card 1',
+      description: 'Descripción del card número 1. Puedes agregar más contenido aquí.',
+    },
+    {
+      id: 2,
+      title: 'Card 2',
+      description: 'Descripción del card número 2. Puedes agregar más contenido aquí.',
+    },
+    {
+      id: 3,
+      title: 'Card 3',
+      description: 'Descripción del card número 3. Puedes agregar más contenido aquí.',
+    },
+    {
+      id: 4,
+      title: 'Card 4',
+      description: 'Descripción del card número 4. Puedes agregar más contenido aquí.',
+    },
+    {
+      id: 5,
+      title: 'Card 5',
+      description: 'Descripción del card número 5. Puedes agregar más contenido aquí.',
+    },
+    {
+      id: 6,
+      title: 'Card 6',
+      description: 'Descripción del card número 6. Puedes agregar más contenido aquí.',
+    },
+  ];
+
+  return (
+    <div className="{{kebabCase name}}">
+      <div className="{{kebabCase name}}__container">
+        <h1 className="{{kebabCase name}}__title">
+          {{pascalCase name}}
+        </h1>
+        
+        <div className="{{kebabCase name}}__grid">
+          {cards.map((card) => (
+            <Card key={card.id} className="{{kebabCase name}}__card">
+              {card.image && (
+                <div className="{{kebabCase name}}__card-image">
+                  <img src={card.image} alt={card.title} />
+                </div>
+              )}
+              <div className="{{kebabCase name}}__card-content">
+                <h3 className="{{kebabCase name}}__card-title">{card.title}</h3>
+                <p className="{{kebabCase name}}__card-description">{card.description}</p>
+              </div>
+              <div className="{{kebabCase name}}__card-actions">
+                <Button variant="primary" size="small">
+                  Ver más
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default {{pascalCase name}};
+

@@ -1,0 +1,67 @@
+.{{kebabCase name}} {
+  min-height: 100vh;
+  background: var(--consalud-white);
+  padding: var(--consalud-spacing-xl);
+}
+
+.{{kebabCase name}}__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.{{kebabCase name}}__title {
+  font-size: var(--consalud-font-size-3xl);
+  font-weight: var(--consalud-font-weight-bold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-lg);
+}
+
+.{{kebabCase name}}__content {
+  padding: var(--consalud-spacing-xl);
+}
+
+.{{kebabCase name}}__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--consalud-spacing-lg);
+}
+
+.{{kebabCase name}}__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--consalud-spacing-xs);
+}
+
+.{{kebabCase name}}__label {
+  font-size: var(--consalud-font-size-base);
+  font-weight: var(--consalud-font-weight-semibold);
+  color: var(--consalud-black);
+}
+
+.{{kebabCase name}}__input,
+.{{kebabCase name}}__textarea {
+  padding: var(--consalud-spacing-sm);
+  border: 1px solid var(--consalud-gray-medium);
+  border-radius: var(--consalud-border-radius-sm);
+  font-size: var(--consalud-font-size-base);
+  font-family: inherit;
+  color: var(--consalud-black);
+  transition: border-color 0.2s;
+}
+
+.{{kebabCase name}}__input:focus,
+.{{kebabCase name}}__textarea:focus {
+  outline: none;
+  border-color: var(--consalud-primary);
+}
+
+.{{kebabCase name}}__textarea {
+  resize: vertical;
+}
+
+.{{kebabCase name}}__form-actions {
+  display: flex;
+  gap: var(--consalud-spacing-md);
+  margin-top: var(--consalud-spacing-md);
+}
+

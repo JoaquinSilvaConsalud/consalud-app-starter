@@ -1,0 +1,24 @@
+/**
+ * {{camelCase name}} - Validation utility function
+ */
+
+interface ValidationResult {
+  isValid: boolean;
+  message?: string;
+}
+
+const {{camelCase name}} = (value: any): ValidationResult => {
+  // Add validation logic here
+  if (!value) {
+    return {
+      isValid: false,
+      message: 'Value is required',
+    };
+  }
+
+  return {
+    isValid: true,
+  };
+};
+
+export default {{camelCase name}};

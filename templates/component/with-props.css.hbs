@@ -1,0 +1,26 @@
+.{{kebabCase name}} {
+  padding: var(--consalud-spacing-lg);
+  border: var(--consalud-border-width) solid var(--consalud-border);
+  border-radius: var(--consalud-border-radius-lg);
+  background: var(--consalud-white);
+  cursor: pointer;
+  transition: var(--consalud-transition-normal);
+}
+
+.{{kebabCase name}}:hover {
+  border-color: var(--consalud-primary);
+  box-shadow: var(--consalud-shadow-sm);
+}
+
+.{{kebabCase name}}__title {
+  font-size: var(--consalud-font-size-xl);
+  font-weight: var(--consalud-font-weight-semibold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-sm);
+}
+
+.{{kebabCase name}}__description {
+  font-size: var(--consalud-font-size-base);
+  color: var(--consalud-black);
+  line-height: var(--consalud-line-height-normal);
+}

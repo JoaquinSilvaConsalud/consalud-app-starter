@@ -1,0 +1,113 @@
+.home {
+  min-height: 100vh;
+  background: var(--consalud-white);
+  padding: var(--consalud-spacing-xl);
+}
+
+.home__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home__header {
+  text-align: center;
+  margin-bottom: var(--consalud-spacing-3xl);
+}
+
+.home__logo {
+  margin-bottom: var(--consalud-spacing-lg);
+  max-width: 320px;
+}
+
+.home__title {
+  font-size: var(--consalud-font-size-3xl);
+  font-weight: var(--consalud-font-weight-bold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-lg);
+}
+
+.home__subtitle {
+  font-size: var(--consalud-font-size-xl);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-xl);
+  line-height: var(--consalud-line-height-normal);
+}
+
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--consalud-spacing-lg);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.home__card {
+  padding: var(--consalud-spacing-xl);
+  text-align: center;
+}
+
+.home__card-title {
+  font-size: var(--consalud-font-size-xl);
+  font-weight: var(--consalud-font-weight-semibold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-md);
+}
+
+.home__card-description {
+  font-size: var(--consalud-font-size-base);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-lg);
+  line-height: var(--consalud-line-height-normal);
+}
+
+.home__code {
+  display: inline-block;
+  font-size: var(--consalud-font-size-sm);
+  background: var(--consalud-border);
+  padding: var(--consalud-spacing-sm) var(--consalud-spacing-md);
+  border-radius: var(--consalud-border-radius-sm);
+  color: var(--consalud-black);
+  font-family: 'Courier New', monospace;
+}
+
+.home__technologies {
+  margin-top: var(--consalud-spacing-3xl);
+  text-align: center;
+}
+
+.home__technologies-title {
+  font-size: var(--consalud-font-size-2xl);
+  font-weight: var(--consalud-font-weight-semibold);
+  color: var(--consalud-black);
+  margin-bottom: var(--consalud-spacing-xl);
+}
+
+.home__technologies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--consalud-spacing-sm);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.home__tech-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--consalud-spacing-md);
+  text-align: center;
+  background: var(--consalud-white);
+}
+
+.home__tech-name {
+  font-weight: var(--consalud-font-weight-medium);
+  color: var(--consalud-black);
+}
+
+.home__tech-version {
+  font-size: var(--consalud-font-size-sm);
+  color: var(--consalud-text-secondary);
+  background: var(--consalud-border);
+  padding: var(--consalud-spacing-xs) var(--consalud-spacing-sm);
+  border-radius: var(--consalud-border-radius-sm);
+}

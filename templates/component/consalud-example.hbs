@@ -1,0 +1,61 @@
+import React from 'react';
+import { Button, Card, Input } from '@consalud/consalud-ui';
+import { formatDate, validateEmail } from '@consalud/consalud-utils';
+import './{{pascalCase name}}.css';
+
+interface {{pascalCase name}}Props {
+  title: string;
+  description?: string;
+  className?: string;
+  onSubmit?: (data: any) => void;
+}
+
+const {{pascalCase name}}: React.FC<{{pascalCase name}}Props> = ({ 
+  title, 
+  description, 
+  className,
+  onSubmit 
+}) => {
+  const [email, setEmail] = React.useState('');
+  const [isValid, setIsValid] = React.useState(false);
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    setIsValid(validateEmail(value));
+  };
+
+  const handleSubmit = () => {
+    if (isValid && onSubmit) {
+      onSubmit({ email, timestamp: formatDate(new Date()) });
+    }
+  };
+
+  return (
+    <Card className={`{{kebabCase name}} ${className || ''}`}>
+      <div className="{{kebabCase name}}__content">
+        <h2 className="{{kebabCase name}}__title">{title}</h2>
+        {description && <p className="{{kebabCase name}}__description">{description}</p>}
+        
+        <div className="{{kebabCase name}}__form">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleEmailChange}
+            error={email && !isValid ? 'Invalid email format' : undefined}
+          />
+          
+          <Button 
+            variant="primary" 
+            onClick={handleSubmit}
+            disabled={!isValid}
+          >
+            Submit
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default {{pascalCase name}};
