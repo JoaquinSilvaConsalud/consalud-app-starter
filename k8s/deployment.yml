@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consalud-app-starter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: consalud-app-starter
+  template:
+    metadata:
+      labels:
+        app: consalud-app-starter
+    spec:
+      containers:
+      - name: consalud-app-starter
+        image: southamerica-west1-docker.pkg.dev/ethereal-brace-475715-d0/new-core-repo/consalud-app-starter:latest
+        ports:
+        - containerPort: 80

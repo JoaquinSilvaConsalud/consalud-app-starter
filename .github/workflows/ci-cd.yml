@@ -1,0 +1,132 @@
+name: "CI/CD - Build, Test, Scan, and Deploy"
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write 
+
+env:
+  PROJECT_ID: ethereal-brace-475715-d0
+  GCP_REGION: southamerica-west1
+  GKE_CLUSTER: new-core-cluster
+  ARTIFACT_REPO: new-core-repo
+  IMAGE_NAME: consalud-app-starter
+
+jobs:
+  build-scan-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run Tests and Generate Coverage
+        run: npm run test -- run --coverage
+
+      - name: Build Project
+        run: npm run build
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions="**/*.test.tsx,**/*.test.ts"
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/466181763387/locations/global/workloadIdentityPools/github-pool-v4/providers/github-provider'
+          service_account: 'github-actions@ethereal-brace-475715-d0.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK and GKE auth plugin
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          install_components: 'gke-gcloud-auth-plugin'
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+      - name: Run Trivy FS scan for dependencies
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          vuln-type: 'library'
+          ignore-unfixed: true
+          output: 'trivy-fs-report.txt'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Generate image tag
+        id: generate_tag
+        run: echo "tag=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.generate_tag.outputs.tag }}
+
+      - name: Get GKE credentials
+        run: gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GCP_REGION }}
+
+      - name: 🚀 1. Apply k8s Resources (Deployment & Service)
+        run: |
+          kubectl apply -f k8s/deployment.yml
+          kubectl apply -f k8s/service.yml
+
+      - name: 🔄 2. Update Deployment Image Tag
+        run: |
+          IMAGE_TAG="${{ steps.generate_tag.outputs.tag }}"
+          kubectl set image deployment/consalud-app-starter consalud-app-starter=$IMAGE_TAG
+
+      - name: Run Trivy image scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.generate_tag.outputs.tag }}
+          scan-type: 'image'
+          vuln-type: 'os,library'
+          ignore-unfixed: true
+          output: 'trivy-image-report.txt'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '0'
+
+      - name: Upload Trivy reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-reports
+          path: |
+            trivy-fs-report.txt
+            trivy-image-report.txt

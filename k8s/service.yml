@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consalud-app-starter-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: consalud-app-starter
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
