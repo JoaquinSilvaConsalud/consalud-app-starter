@@ -22,8 +22,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.26.0",
     "zustand": "^4.4.7",
-    "@consalud/consalud-ui": "file:../consalud-ui",
-    "@consalud/consalud-utils": "file:../consalud-utils"
+    "@consalud/consalud-ui": "1.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

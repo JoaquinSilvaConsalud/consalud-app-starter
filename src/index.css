@@ -1,4 +1,4 @@
-@import url('../node_modules/@consalud/consalud-ui/src/tokens.css');
+@import url('@consalud/consalud-ui/dist/index.css');
 
 /* Minimal normalize/reset */
 html,
