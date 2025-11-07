@@ -11,7 +11,7 @@ RUN echo "always-auth=true" >> .npmrc
 
 COPY package.json package-lock.json* ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
