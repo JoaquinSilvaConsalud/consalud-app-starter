@@ -25,9 +25,9 @@ class ApiClient {
     const { params, ...fetchConfig } = config;
     const url = this.buildURL(endpoint, params);
 
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...fetchConfig.headers,
+      ...(fetchConfig.headers as Record<string, string>),
     };
 
     const token = localStorage.getItem('token');
