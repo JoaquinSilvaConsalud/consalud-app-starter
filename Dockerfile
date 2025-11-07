@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build
+FROM node:18-slim AS build
 
 ARG GCP_NPM_TOKEN
 ARG GCP_NPM_REPO_PATH
