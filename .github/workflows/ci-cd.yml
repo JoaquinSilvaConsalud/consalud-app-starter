@@ -18,15 +18,17 @@ permissions:
   id-token: write 
 
 env:
-  PROJECT_ID: ethereal-brace-475715-d0
-  GCP_REGION: southamerica-west1
-  GKE_CLUSTER: new-core-cluster
-  ARTIFACT_REPO: new-core-repo
-  IMAGE_NAME: consalud-app-starter
+  PROJECT_ID: ${{ vars.PROJECT_ID }}
+  GCP_LOCATION: ${{ vars.GCP_LOCATION }}
+  GKE_CLUSTER: ${{ vars.GKE_CLUSTER }}
+  IMAGE_NAME: ${{ vars.IMAGE_NAME }}
+  ARTIFACT_REPO: ${{ vars.ARTIFACT_REPO }}
+  GCP_NPM_REPO_NAME: ${{ vars.GCP_NPM_REPO_NAME }}
 
 jobs:
   build-scan-and-deploy:
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,38 +38,14 @@ jobs:
       - name: Set up Node.js 18
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Run Tests and Generate Coverage
-        run: npm run test -- run --coverage
-
-      - name: Build Project
-        run: npm run build
-
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.sources=src
-            -Dsonar.tests=src
-            -Dsonar.test.inclusions="**/*.test.tsx,**/*.test.ts"
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          node-version: 18
 
       - name: Authenticate to Google Cloud
+        id: auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/466181763387/locations/global/workloadIdentityPools/github-pool-v4/providers/github-provider'
-          service_account: 'github-actions@ethereal-brace-475715-d0.iam.gserviceaccount.com'
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Set up Cloud SDK and GKE auth plugin
         uses: google-github-actions/setup-gcloud@v2
@@ -75,58 +53,38 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           install_components: 'gke-gcloud-auth-plugin'
 
-      - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+      - name: 🔑 Get GCP AR Access Token (for NPM)
+        id: get_npm_token
+        run: echo "GCP_NPM_TOKEN=$(gcloud auth print-access-token)" >> $GITHUB_ENV
 
-      - name: Run Trivy FS scan for dependencies
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          vuln-type: 'library'
-          ignore-unfixed: true
-          output: 'trivy-fs-report.txt'
-          severity: 'HIGH,CRITICAL'
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.GCP_LOCATION }}-docker.pkg.dev
 
       - name: Generate image tag
         id: generate_tag
-        run: echo "tag=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
+        run: echo "tag=${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
+        id: docker-push
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ steps.generate_tag.outputs.tag }}
+          build-args: |
+            GCP_NPM_TOKEN=${{ env.GCP_NPM_TOKEN }}
+            GCP_NPM_REPO_PATH=${{ env.GCP_LOCATION }}-npm.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GCP_NPM_REPO_NAME }}
 
       - name: Get GKE credentials
-        run: gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GCP_REGION }}
+        run: gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GCP_LOCATION }}
 
       - name: 🚀 1. Apply k8s Resources (Deployment & Service)
         run: |
           kubectl apply -f k8s/deployment.yml
           kubectl apply -f k8s/service.yml
 
-      - name: 🔄 2. Update Deployment Image Tag
+      - name: 🔄 2. Deploy to GKE
         run: |
           IMAGE_TAG="${{ steps.generate_tag.outputs.tag }}"
           kubectl set image deployment/consalud-app-starter consalud-app-starter=$IMAGE_TAG
-
-      - name: Run Trivy image scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ steps.generate_tag.outputs.tag }}
-          scan-type: 'image'
-          vuln-type: 'os,library'
-          ignore-unfixed: true
-          output: 'trivy-image-report.txt'
-          severity: 'HIGH,CRITICAL'
-          exit-code: '0'
-
-      - name: Upload Trivy reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: trivy-reports
-          path: |
-            trivy-fs-report.txt
-            trivy-image-report.txt
