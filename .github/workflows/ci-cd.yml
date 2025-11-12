@@ -60,10 +60,6 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.GCP_LOCATION }}-docker.pkg.dev
 
-      - name: Generate image tag
-        id: generate_tag
-        run: echo "tag=${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_OUTPUT
-
       - name: Build and push Docker image
         id: docker-push
         uses: docker/build-push-action@v6
@@ -71,7 +67,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.generate_tag.outputs.tag }}
+          tags: |
+            ${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
             GCP_NPM_TOKEN=${{ env.GCP_NPM_TOKEN }}
             GCP_NPM_REPO_PATH=${{ env.GCP_LOCATION }}-npm.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GCP_NPM_REPO_NAME }}
