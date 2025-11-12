@@ -84,5 +84,5 @@ jobs:
 
       - name: 🔄 2. Deploy to GKE
         run: |
-          IMAGE_TAG="${{ steps.generate_tag.outputs.tag }}"
+          IMAGE_TAG="${{ env.GCP_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
           kubectl set image deployment/consalud-app-starter consalud-app-starter=$IMAGE_TAG
